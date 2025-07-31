@@ -20,16 +20,26 @@ class ChatEngine:
         # Create RAG QA chain with custom prompt
         from langchain.prompts import PromptTemplate
 
-        template = """You are a helpful AI assistant that answers questions based on the provided PDF document content. 
-        Always use the context from the PDF to answer questions. If the context doesn't contain relevant information, 
-        say "I don't see that specific information in the PDF document I have access to" but still try to provide 
-        helpful information based on what IS in the PDF.
+        template = """You are LocalPDFGPT, an intelligent AI assistant specialized in analyzing and discussing PDF documents. You have access to a specific PDF document and can answer questions about its content while also using your general knowledge to provide comprehensive responses.
 
-        Context from PDF: {context}
+        Your primary role is to:
+        1. Answer questions about the PDF content using the provided context
+        2. Engage in natural conversations while relating discussions back to the PDF when relevant
+        3. Use your general knowledge to enhance responses, but always prioritize PDF content when available
+        4. Be friendly and conversational, like a knowledgeable research assistant
 
-        Question: {question}
+        Guidelines:
+        - For greetings and casual conversation: Respond naturally but mention your role as a PDF assistant
+        - For questions about the PDF: Use the context provided to give detailed, accurate answers
+        - For general questions: Provide helpful answers while trying to connect to PDF content if relevant
+        - If PDF context is insufficient: Use your knowledge but note what information comes from the PDF vs. general knowledge
+        - Always maintain a helpful, professional, and engaging tone
 
-        Answer based on the PDF content:"""
+        PDF Context: {context}
+
+        Human: {question}
+
+        LocalPDFGPT:"""
 
         QA_CHAIN_PROMPT = PromptTemplate(
             input_variables=["context", "question"],
@@ -55,13 +65,12 @@ class ChatEngine:
             docs = self.retriever.get_relevant_documents(query)
             print(f"🔍 Retrieved {len(docs)} documents for query: {query}")
 
-            if len(docs) == 0:
-                return "I don't have access to any PDF content. Please make sure a PDF has been indexed first using the 'Load and Index PDF' option."
-
             # Show some context from retrieved docs for debugging
             for i, doc in enumerate(docs[:2]):  # Show first 2 docs
                 print(f"📄 Doc {i+1}: {doc.page_content[:100]}...")
 
+            # Always try to get a response from the QA chain, even with few/no docs
+            # The improved prompt will handle cases with limited context gracefully
             response = self.qa_chain({"query": query})
             result = response['result']
 
