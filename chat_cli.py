@@ -1,29 +1,15 @@
 # chat_cli.py
-from langchain.vectorstores import Chroma
-from langchain.embeddings import OllamaEmbeddings
-from langchain.chains import RetrievalQA
-from langchain_community.llms import Ollama
+from chat_engine import ChatEngine
 
-# Load vector store
-embedding = OllamaEmbeddings(model="mistral-nemo")
-vectorstore = Chroma(persist_directory="./db", embedding_function=embedding)
-retriever = vectorstore.as_retriever()
-
-# Load local LLM
-llm = Ollama(model="mistral-nemo")
-
-# Create RAG QA chain
-qa_chain = RetrievalQA.from_chain_type(
-    llm=llm,
-    retriever=retriever,
-    return_source_documents=False  # Change to True if you want sources
-)
+# Initialize chat engine
+chat_engine = ChatEngine(model_name="llama3.2:latest")
 
 # Chat loop
-print("🤖 Ask me anything about the company (type 'exit' to quit)")
+print("🤖 Ask me anything about the PDF (type 'exit' to quit)")
+print("💾 Chat history is automatically saved to chat_history.json")
 while True:
     query = input("\n> ")
     if query.lower() in ['exit', 'quit']:
         break
-    response = qa_chain({"query": query})
-    print("\nAnswer:\n", response['result'])
+    response = chat_engine.get_response(query)
+    print("\nAnswer:\n", response)
