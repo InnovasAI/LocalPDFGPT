@@ -8,6 +8,30 @@ __pycache__/
 .venv/
 venv/
 ENV/
+
+# Chat history and exports
+chat_history.json
+chat_export_*.json
+
+# Vector database
+db/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# Temporary files
+*.tmp
+*.temp
 env/
 
 # VSCode settings
