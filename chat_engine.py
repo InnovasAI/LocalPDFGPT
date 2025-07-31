@@ -29,7 +29,6 @@ class ChatEngine:
         4. Be friendly and conversational, like a knowledgeable research assistant
 
         Guidelines:
-        - For greetings and casual conversation: Respond naturally but mention your role as a PDF assistant
         - For questions about the PDF: Use the context provided to give detailed, accurate answers
         - For general questions: Provide helpful answers while trying to connect to PDF content if relevant
         - If PDF context is insufficient: Use your knowledge but note what information comes from the PDF vs. general knowledge
