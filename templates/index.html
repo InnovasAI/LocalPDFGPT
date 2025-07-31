@@ -40,6 +40,26 @@
             position: relative;
         }
         
+        .menu-toggle {
+            position: absolute;
+            top: 50%;
+            right: 60px;
+            transform: translateY(-50%);
+            background: transparent;
+            border: 1px solid #333333;
+            border-radius: 6px;
+            color: #d1d5db;
+            padding: 6px 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+        
+        .menu-toggle:hover {
+            background: #1a1a1a;
+            border-color: #555555;
+        }
+        
         .chat-header h1 {
             font-size: 16px;
             font-weight: 600;
@@ -82,6 +102,11 @@
             gap: 8px;
             justify-content: flex-start;
             flex-wrap: wrap;
+            transition: all 0.3s ease;
+        }
+        
+        .chat-controls.show {
+            display: flex;
         }
         
         .btn {
@@ -233,8 +258,8 @@
         
         .chat-input-container {
             padding: 20px;
-            background: #343541;
-            border-top: 1px solid #4d4d4f;
+            background: #000000;
+            border-top: 1px solid #333333;
         }
         
         .chat-input-wrapper {
@@ -246,8 +271,8 @@
         .chat-input-form {
             display: flex;
             align-items: end;
-            background: #40414f;
-            border: 1px solid #4d4d4f;
+            background: #111111;
+            border: 1px solid #333333;
             border-radius: 16px;
             padding: 12px;
             gap: 12px;
@@ -513,6 +538,9 @@
 <body>
     <div class="chat-container">
         <div class="chat-header">
+            <button class="menu-toggle" onclick="toggleControls()" title="Show/Hide Controls">
+                ⋮
+            </button>
             <h1>
                 🧠 LocalPDFGPT
                 <span class="model-info">• Chat with your PDF using local AI</span>
@@ -520,7 +548,7 @@
             <div class="status-indicator" id="statusIndicator"></div>
         </div>
         
-        <div class="chat-controls">
+        <div class="chat-controls" id="chatControls">
             <button class="btn btn-primary" onclick="loadHistory()">
                 📂 Load History
             </button>
@@ -562,6 +590,12 @@
 
     <script>
         let isLoading = false;
+        
+        // Toggle controls visibility
+        function toggleControls() {
+            const controls = document.getElementById('chatControls');
+            controls.classList.toggle('show');
+        }
         
         // Auto-resize textarea
         function autoResize(textarea) {
